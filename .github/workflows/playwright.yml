@@ -36,39 +36,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-
-      - name: Send email on success
-        if: success()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "Playwright Tests PASSED - ${{ github.repository }}"
-          to: mayankthakur9181@gmail.com
-          from: GitHub Actions
-          body: |
-            All Playwright tests passed on PR #${{ github.event.number }}
-            Branch: ${{ github.head_ref }}
-            Commit: ${{ github.sha }}
-            Repository: ${{ github.repository }}
-            View report in Actions tab under Artifacts.
-
-      - name: Send email on failure
-        if: failure()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "Playwright Tests FAILED - ${{ github.repository }}"
-          to: mayankthakur9181@gmail.com
-          from: GitHub Actions
-          body: |
-            Playwright tests FAILED on PR #${{ github.event.number }}
-            Branch: ${{ github.head_ref }}
-            Commit: ${{ github.sha }}
-            Repository: ${{ github.repository }}
-            Check Actions tab for error details and download HTML report.
