@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 
 test("Excalidraw full end-to-end user flow", async ({ page }) => {
   console.log("=== EXCALIDRAW USER END TESTING ===");
