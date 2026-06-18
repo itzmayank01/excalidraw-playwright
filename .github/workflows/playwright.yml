@@ -44,7 +44,7 @@ jobs:
           retention-days: 30
 
       - name: Deploy report to GitHub Pages
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && github.event_name != 'pull_request' }}
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
