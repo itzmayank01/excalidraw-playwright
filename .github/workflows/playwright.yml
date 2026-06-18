@@ -8,8 +8,7 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
+  pull-requests: write
 
 jobs:
   playwright-tests:
@@ -33,9 +32,10 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: npx playwright test tests/excalidraw.spec.ts
+        id: tests
+        run: npx playwright test tests/excalidraw.spec.ts 2>&1 | tee test-output.txt
 
-      - name: Upload HTML report as artifact
+      - name: Upload HTML report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -43,9 +43,8 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - name: Deploy report to GitHub Pages
-        if: ${{ !cancelled() && github.event_name != 'pull_request' }}
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Post test results to PR
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./playwright-report
+          path: test-output.txt
